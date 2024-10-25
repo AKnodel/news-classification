@@ -1,0 +1,17 @@
+news-classification/
+│
+├── app/  # Backend and functionalities
+│   ├── __init__.py
+│   ├── data_collection.py  # Real-time data fetching and preprocessing
+│   ├── category_classification.py  # Classification model
+│   ├── sentiment_analysis.py  # Sentiment analysis model
+│   ├── ner_extraction.py  # Named entity recognition
+│   ├── utils.py  # Helper functions (e.g., tokenization, text cleaning)
+│
+├── models/  # Pre-trained models or saved classifiers
+│   ├── roberta_model/  # Pre-trained RoBERTa model
+│   ├── sentiment_model.pkl
+│
+├── streamlit_app.py  # Main streamlit web app
+├── requirements.txt  # Required Python packages
+└── README.md  # Project documentation

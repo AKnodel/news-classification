@@ -1,0 +1,3 @@
+**Model Download:** The pre-trained model weights are available for download due to their size. You can access them here: [Link to Google Drive folder](https://drive.google.com/drive/folders/1-1VXJY-6IWGJaKJBOsanx53Es_OX3w-a?usp=sharing).
+
+**Important Note:** This link might require permission to access the folder. Please ensure you have the necessary permissions before attempting to download the model.

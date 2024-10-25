@@ -1,0 +1,36 @@
+# Streamlit for the web interface
+streamlit
+
+# Requests for web-sraping
+beautifulsoup4
+
+
+# Scikit-learn for machine learning models (classification)
+scikit-learn
+
+# NLTK for tokenization, stopwords, and text preprocessing
+nltk
+
+# SpaCy for Named Entity Recognition
+spacy
+
+# Hugging Face transformers for sentiment analysis
+transformers
+
+# PyTorch for using transformers (required by transformers)
+torch
+
+# Joblib for saving and loading models
+joblib
+
+# TfidfVectorizer and LogisticRegression (from scikit-learn)
+
+# Optional: If using pre-trained transformers models from Hugging Face
+# and potentially large models, you may also want to use the following:
+# datasets==2.17.1  # for handling datasets in the transformers ecosystem
+
+# Additional packages for spaCy (if not included in the conda environment)
+en-core-web-sm  # For spaCy’s small English model (will be downloaded within the script)
+
+# Optional for RoBERTa model fine-tuning
+datasets  # If using custom datasets in Hugging Face ecosystem
