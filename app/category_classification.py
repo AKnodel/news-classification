@@ -1,14 +1,19 @@
-# app/category_classification.py
-
 import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
 from transformers import RobertaTokenizer, RobertaForSequenceClassification, AdamW
+from huggingface_hub import login  # Import login function
 from sklearn.preprocessing import LabelEncoder
 import random
 
+# Set your Hugging Face token here
+HUGGINGFACE_TOKEN = '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'  # Replace with your actual token
+
 # Set a seed for reproducibility
 random.seed(42)
+
+# Log in to Hugging Face
+login(HUGGINGFACE_TOKEN)
 
 # Load data from CSV
 def load_data():

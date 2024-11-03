@@ -16,7 +16,7 @@ def sentiment_analysis(text):
     :return: A sentiment label (Positive, Neutral, Negative) with its confidence score
     """
     try:
-        result = sentiment_pipeline(text)
+        result = sentiment_pipeline(text, truncation=True, max_length=512)
         sentiment_label = result[0]['label']
         confidence_score = result[0]['score']
         

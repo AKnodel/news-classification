@@ -1,107 +1,76 @@
-# app/data_collection.py
-
-import requests
 import pandas as pd
-from bs4 import BeautifulSoup
 from .utils import preprocess_text
+import http.client, urllib.parse
+import json
+import requests
+from bs4 import BeautifulSoup
 
-def fetch_news(query="technology"):
+def fetch_article_content(url):
     """
-    Fetches news articles from multiple global and Indian news outlets.
+    Fetches the full content of an article given its URL.
+    
+    Parameters:
+    - url: The URL of the news article.
+    
+    Returns:
+    - Full article content as a string or None if an error occurs.
+    """
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Check for HTTP request errors
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # Attempt to extract article content based on common patterns
+        paragraphs = soup.find_all('p')
+        content = ' '.join([p.get_text(strip=True) for p in paragraphs if p.get_text(strip=True)])
+        
+        return content.strip() if content else None
+
+    except Exception as e:
+        print(f"Error fetching article content from {url}: {str(e)}")
+        return None
+    
+def fetch_news(query="technology", api_key="5f0SGwPZSqlYzbxClJVoVZ5cAi9q2ySZqwHOYwwm"):
+    """
+    Fetches news articles based on a topic using News API.
     
     Parameters:
     - query: The topic to search for news articles.
+    - api_key: Your News API key.
     
     Returns:
     - A DataFrame containing news article details.
     """
-    sources = {
-        "BBC": f"https://www.bbc.co.uk/search?q={query}",
-        "CNN": f"https://www.cnn.com/search?q={query}",
-        "Reuters": f"https://www.reuters.com/search/news?blob={query}",
-        "Times of India": f"https://timesofindia.indiatimes.com/search/news/{query}",
-        "The Hindu": f"https://www.thehindu.com/search/?q={query}",
-        "NDTV": f"https://www.ndtv.com/search?searchtext={query}"
-    }
+    conn = http.client.HTTPSConnection('api.thenewsapi.com')
+    params = urllib.parse.urlencode({
+        'q': query,
+        'api_token': api_key,
+        'language': 'en',  # Fetch only English articles
+        'sort': 'relevance'  # Sort by relevancy to the query
+    })
 
-    articles = []
-
-    for outlet, url in sources.items():
-        print(f"Fetching articles from {outlet}...")
-        try:
-            # Send request to fetch news
-            response = requests.get(url)
-            response.raise_for_status()  # Check for HTTP request errors
-            soup = BeautifulSoup(response.content, 'html.parser')
-
-            # Define selectors based on the outlet structure
-            if outlet == "BBC":
-                for item in soup.select('.SearchResult'):
-                    title = item.select_one('h1').get_text(strip=True)
-                    content = item.select_one('p').get_text(strip=True)
-                    articles.append({'title': title, 'content': content, 'source': outlet})
-            elif outlet == "CNN":
-                for item in soup.select('.cnn-search__result-headline'):
-                    title = item.get_text(strip=True)
-                    link = item.find('a')['href']
-                    if not link.startswith('http'):
-                        link = 'https://www.cnn.com' + link  # Handle relative links
-                    content = fetch_article_content(link)  # Fetch full content from the link
-                    articles.append({'title': title, 'content': content, 'source': outlet})
-            elif outlet == "Reuters":
-                for item in soup.select('.search-result'):
-                    title = item.select_one('h3').get_text(strip=True)
-                    link = item.find('a')['href']
-                    if not link.startswith('http'):
-                        link = 'https://www.reuters.com' + link  # Handle relative links
-                    content = fetch_article_content(link)  # Fetch full content from the link
-                    articles.append({'title': title, 'content': content, 'source': outlet})
-            elif outlet == "Times of India":
-                for item in soup.select('.searchResult'):
-                    title = item.select_one('.title').get_text(strip=True)
-                    content = item.select_one('.description').get_text(strip=True)
-                    articles.append({'title': title, 'content': content, 'source': outlet})
-            elif outlet == "The Hindu":
-                for item in soup.select('.story-card'):
-                    title = item.select_one('.story-card-title').get_text(strip=True)
-                    content = item.select_one('.story-card-content').get_text(strip=True)
-                    articles.append({'title': title, 'content': content, 'source': outlet})
-            elif outlet == "NDTV":
-                for item in soup.select('.search-result'):
-                    title = item.select_one('.article-title').get_text(strip=True)
-                    content = item.select_one('.article-summary').get_text(strip=True)
-                    articles.append({'title': title, 'content': content, 'source': outlet})
-
-        except Exception as e:
-            print(f"Error fetching from {outlet}: {str(e)}")
-
-    # Convert the articles to a DataFrame
-    news_df = pd.DataFrame(articles)
-    return news_df
-
-def fetch_article_content(link):
-    """
-    Fetches the full content of an article given its link.
-    
-    Parameters:
-    - link: The URL of the news article.
-    
-    Returns:
-    - Full article content as a string.
-    """
     try:
-        response = requests.get(link)
-        response.raise_for_status()  # Check for HTTP request errors
-        soup = BeautifulSoup(response.content, 'html.parser')
+        conn.request('GET', f'/v1/news/all?{params}')
+
+        res = conn.getresponse()
+        data = res.read()
+
+        print(data.decode('utf-8'))
+        articles_data = json.loads(data.decode('utf-8')).get('data', [])
         
-        # Extract content based on typical structures (you may need to adjust based on the website)
-        paragraphs = soup.select('p')  # This can vary, adjust selector if necessary
-        content = ' '.join([p.get_text(strip=True) for p in paragraphs if p.get_text(strip=True)])
-        
-        return content
+        articles = [{
+            'title': article['title'],
+            'content': article['description'] or "",  # Use description for content if available
+            'source': article['source'],
+            'url': article['url']
+        } for article in articles_data]
+
+        news_df = pd.DataFrame(articles)
+        return news_df
+
     except Exception as e:
-        print(f"Error fetching article content: {str(e)}")
-        return ""
+        print(f"Error fetching news: {str(e)}")
+        return pd.DataFrame()  # Return an empty DataFrame if there's an error
 
 # Preprocess the news articles
 def preprocess_news_data(df):
@@ -115,4 +84,4 @@ def preprocess_news_data(df):
     - A DataFrame with cleaned article text.
     """
     df['cleaned_text'] = df['content'].apply(lambda text: preprocess_text(text) if text else "")
-    return df[['title', 'cleaned_text']]  # Return only relevant columns (title and cleaned text)
+    return df[['title','url', 'cleaned_text']]  # Return only relevant columns (title and cleaned text)
