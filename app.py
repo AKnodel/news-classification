@@ -2,9 +2,9 @@ import streamlit as st
 from app.data_collection import fetch_news, preprocess_news_data, fetch_article_content
 from app.category_classification import classify_news
 from app.sentiment_analysis import sentiment_analysis
-from app.ner_extraction import extract_entities
+from app.ner_extraction import analyze_story
 from app.utils import preprocess_text
-
+from app.summarization import summarize_article
 # Streamlit App Setup
 st.title("Real-time News Article Classification")
 
@@ -47,19 +47,37 @@ else:
     st.write(st.session_state.selected_article_content)
     
     # Step 4: Preprocess the Selected Article
-    cleaned_article = preprocess_text(st.session_state.selected_article_content)
-    st.write("Cleaned Article Content:")
-    st.write(cleaned_article)
+    # cleaned_article = preprocess_text(st.session_state.selected_article_content)
+    # st.write("Cleaned Article Content:")
+    # st.write(cleaned_article)
+    cleaned_article=summarize_article(st.session_state.selected_article_content,method="both")
+    st.write("Summarized Article Content:")
+    st.write("Extractive")
+    st.write(cleaned_article['extractive'])
+    st.write("Abstractive")
+    st.write(cleaned_article['abstractive'])
     
     # Step 5: Perform Classification
-    category = classify_news(cleaned_article)
+    category = classify_news(cleaned_article['abstractive'])
     st.write(f"Predicted Category: **{category}**")
     
     # Step 6: Sentiment Analysis
-    sentiment = sentiment_analysis(cleaned_article)
+    sentiment = sentiment_analysis(cleaned_article['abstractive'])
     st.write(f"Sentiment Analysis: **{sentiment}**")
     
     # Step 7: Named Entity Recognition (NER)
-    entities = extract_entities(cleaned_article)
-    st.write("Named Entities Extracted:")
-    st.write(entities)
+    entities = analyze_story(cleaned_article['abstractive'])
+    st.subheader("Named Entities Extracted:")
+    st.subheader("Characters: ")
+    st.write(entities["characters"])
+
+    st.subheader("Protagonist: ")
+    st.write(entities["protagonist"])
+
+    st.subheader("Character Traits: ")
+    for char, traits in entities["character_traits"].items():
+        st.write(f"{char}: {', '.join(traits)}")
+
+    st.subheader("Character Relationships: ")
+    for (char1, char2), relationship in entities["relationships"].items():
+        st.write(f"{char1} and {char2}: {relationship}")
