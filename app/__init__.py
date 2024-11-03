@@ -5,3 +5,4 @@ from .category_classification import classify_news
 from .sentiment_analysis import sentiment_analysis
 from .ner_extraction import extract_entities
 from .utils import preprocess_text
+from .summarization import summarize_article
