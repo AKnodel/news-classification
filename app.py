@@ -3,7 +3,6 @@ from app.data_collection import fetch_news, preprocess_news_data, fetch_article_
 from app.category_classification import classify_news
 from app.sentiment_analysis import sentiment_analysis
 from app.ner_extraction import analyze_story
-from app.utils import preprocess_text
 from app.summarization import summarize_article
 # Streamlit App Setup
 st.title("Real-time News Article Classification")
