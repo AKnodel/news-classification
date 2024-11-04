@@ -3,6 +3,10 @@
 ## Introduction
 This project is a Streamlit-based web application designed to analyze news articles in real-time. The app allows users to search for articles on a specified topic, classify them by category, perform sentiment analysis, recognize named entities, and generate both extractive and abstractive summaries of article content.
 
+
+https://github.com/user-attachments/assets/2c3edb76-62d6-4e43-9d41-fe45edb9bdad
+
+
 ## Project Structure
 The project is organized as follows:
 
