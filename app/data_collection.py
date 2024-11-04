@@ -29,7 +29,7 @@ def fetch_article_content(url):
         print(f"Error fetching article content from {url}: {str(e)}")
         return None
     
-def fetch_news(query="technology", api_key="5f0SGwPZSqlYzbxClJVoVZ5cAi9q2ySZqwHOYwwm"):
+def fetch_news(query="technology", api_key="YOUR_NEWSAPI_KEY"):
     """
     Fetches news articles based on a topic using News API.
     
