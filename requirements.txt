@@ -4,7 +4,6 @@ streamlit
 # Requests for web-sraping
 beautifulsoup4
 
-
 # Scikit-learn for machine learning models (classification)
 scikit-learn
 
@@ -23,6 +22,11 @@ torch
 # Joblib for saving and loading models
 joblib
 
+peft
+
+# Stanza for coference resolution
+stanza
+
 # TfidfVectorizer and LogisticRegression (from scikit-learn)
 
 # Optional: If using pre-trained transformers models from Hugging Face
@@ -31,6 +35,6 @@ joblib
 
 # Additional packages for spaCy (if not included in the conda environment)
 en-core-web-sm  # For spaCy’s small English model (will be downloaded within the script)
-
+en-core-web-lg # For spacy's large English model
 # Optional for RoBERTa model fine-tuning
 datasets  # If using custom datasets in Hugging Face ecosystem
