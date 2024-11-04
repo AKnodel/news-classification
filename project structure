@@ -10,7 +10,6 @@ news-classification/
 │
 ├── models/  # Pre-trained models or saved classifiers
 │   ├── roberta_model/  # Pre-trained RoBERTa model
-│   ├── 
 │
 ├── app.py  # Main streamlit web app
 ├── requirements.txt  # Required Python packages
