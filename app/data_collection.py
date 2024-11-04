@@ -70,17 +70,3 @@ def fetch_news(query="technology", api_key="5f0SGwPZSqlYzbxClJVoVZ5cAi9q2ySZqwHO
     except Exception as e:
         print(f"Error fetching news: {str(e)}")
         return pd.DataFrame()  # Return an empty DataFrame if there's an error
-
-# Preprocess the news articles
-def preprocess_news_data(df):
-    """
-    Preprocesses a DataFrame containing news articles by cleaning text data.
-    
-    Parameters:
-    - df: A DataFrame containing news articles fetched from the API.
-    
-    Returns:
-    - A DataFrame with cleaned article text.
-    """
-    df['cleaned_text'] = df['content'].apply(lambda text: preprocess_text(text) if text else "")
-    return df[['title','url', 'cleaned_text']]  # Return only relevant columns (title and cleaned text)
