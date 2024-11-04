@@ -6,12 +6,12 @@ news-classification/
 │   ├── category_classification.py  # Classification model
 │   ├── sentiment_analysis.py  # Sentiment analysis model
 │   ├── ner_extraction.py  # Named entity recognition
-│   ├── utils.py  # Helper functions (e.g., tokenization, text cleaning)
+│   ├── summarization.py  # For abstractive and extractive summarization
 │
 ├── models/  # Pre-trained models or saved classifiers
 │   ├── roberta_model/  # Pre-trained RoBERTa model
-│   ├── sentiment_model.pkl
+│   ├── 
 │
-├── streamlit_app.py  # Main streamlit web app
+├── app.py  # Main streamlit web app
 ├── requirements.txt  # Required Python packages
 └── README.md  # Project documentation
