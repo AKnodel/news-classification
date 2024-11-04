@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 import random
 
 # Set your Hugging Face token here
-HUGGINGFACE_TOKEN = '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'  # Replace with your actual token
+HUGGINGFACE_TOKEN = 'YOUR_HUGGINGFACE_TOKEN'  # Replace with your actual token
 
 # Set a seed for reproducibility
 random.seed(42)
