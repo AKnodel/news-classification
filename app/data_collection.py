@@ -1,5 +1,4 @@
 import pandas as pd
-from .utils import preprocess_text
 import http.client, urllib.parse
 import json
 import requests
